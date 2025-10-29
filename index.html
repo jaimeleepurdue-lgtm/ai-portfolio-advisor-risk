@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Portfolio Advisor — Example Output</title>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root{
+      --bg:#071028; --card:#0f1a2b; --muted:#9fb0c6; --accent:#38bdf8;
+      --success:#22c55e; --danger:#ef4444; --glass: rgba(255,255,255,0.03);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    body{background:linear-gradient(180deg,#031226 0%, #071028 100%); margin:0; color:#e6f0f7}
+    .wrap{max-width:1100px;margin:28px auto;padding:24px}
+    header{display:flex;gap:16px;align-items:center;margin-bottom:18px}
+    h1{font-size:20px;margin:0}
+    .subtitle{color:var(--muted);font-size:13px}
+    .grid{display:grid;grid-template-columns: 1fr 420px; gap:18px}
+    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 20px rgba(2,6,23,0.6)}
+    .small{font-size:13px;color:var(--muted)}
+    .pill{background:var(--glass);padding:8px 12px;border-radius:999px;color:var(--muted);display:inline-block}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+    th,td{padding:8px 10px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.03)}
+    .btn{background:var(--accent); color:#062233; border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+    .muted{color:var(--muted)}
+    .center{text-align:center}
+    .charts {display:flex;flex-direction:column;gap:16px}
+    .metrics{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap}
+    .metric{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:10px 12px;border-radius:10px}
+    footer{color:var(--muted);font-size:12px;text-align:center;margin-top:18px}
+    @media (max-width:980px){.grid{grid-template-columns:1fr;}.charts{order:2}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>AI-Powered Portfolio Advisor — Example Output</h1>
+        <div class="subtitle">Scenario: <strong>I'm 20 years old in college — moderate-risk, long-term (30+ years)</strong></div>
+      </div>
+      <div style="margin-left:auto" class="row">
+        <span class="pill">Moderate risk</span>
+        <span class="pill">Long horizon (30+ yrs)</span>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- left column: charts + summary -->
+      <div>
+        <div class="card charts">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <h3 style="margin:0">Recommended Asset Allocation</h3>
+              <div class="small">Target allocation for a 20-year-old with moderate risk tolerance</div>
+            </div>
+            <div class="small muted">Last updated: <strong id="updated">Example</strong></div>
+          </div>
+
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
+            <canvas id="pieAlloc" width="300" height="220" style="max-width:480px"></canvas>
+            <canvas id="barBreakdown" width="420" height="220" style="max-width:480px"></canvas>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="small muted">Estimated blended return (nominal)</div>
+              <div style="font-weight:700">~6.2% / year</div>
+            </div>
+            <div class="metric">
+              <div class="small muted">Projected volatility (est.)</div>
+              <div style="font-weight:700">~10% (annual)</div>
+            </div>
+            <div class="metric">
+              <div class="small muted">Time horizon</div>
+              <div style="font-weight:700">30+ years</div>
+            </div>
+            <div class="metric">
+              <div class="small muted">Initial example investment</div>
+              <div style="font-weight:700">$10,000</div>
+            </div>
+          </div>
+
+          <div style="margin-top:14px">
+            <h4 style="margin:0">Projection (example growth scenario)</h4>
+            <div class="small muted">Projection assumes blended return, monthly contributions of $200. This is illustrative, not financial advice.</div>
+            <canvas id="growth" width="800" height="240" style="max-width:100%;margin-top:10px"></canvas>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h3 style="margin:0">Rationale & Guidance</h3>
+          <ul class="small muted" style="margin-top:10px;line-height:1.6">
+            <li><strong>Stocks (60%)</strong> drive long-term growth — suitable for a 20-year horizon.</li>
+            <li><strong>Bonds (30%)</strong> provide drawdown protection and reduce short-term volatility.</li>
+            <li><strong>Real estate & alternatives (5%)</strong> provide inflation hedge and diversification.</li>
+            <li><strong>Cash (5%)</strong> kept for short-term needs / opportunistic buys.</li>
+          </ul>
+          <div style="margin-top:12px" class="small">
+            <strong>Actionable next steps:</strong>
+            <ol>
+              <li>Open a tax-advantaged account (Roth IRA) if eligible.</li>
+              <li>Use low-cost index ETFs to implement allocation (examples below).</li>
+              <li>Rebalance annually or when allocation drifts >5%.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- right column: details, suggested ETFs -->
+      <aside>
+        <div class="card">
+          <h3 style="margin:0">Allocation (percent)</h3>
+          <table aria-hidden="true">
+            <thead>
+              <tr><th>Asset</th><th>Target %</th></tr>
+            </thead>
+            <tbody id="allocTable">
+              <!-- filled by JS -->
+            </tbody>
+          </table>
+
+          <h4 style="margin-top:12px">Suggested ETFs / Funds</h4>
+          <div class="small muted" style="margin-top:6px">
+            Examples to implement this allocation using low-cost ETFs:
+            <ul style="margin-top:8px">
+              <li><strong>Stocks 60%</strong>: VTI (US total), VXUS (intl) split inside bucket</li>
+              <li><strong>Bonds 30%</strong>: BND (total bond) or AGG; consider TIPS portion</li>
+              <li><strong>Real Estate 5%</strong>: VNQ (REITs)</li>
+              <li><strong>Commodities 3%</strong>: broad commodity ETF (e.g., DBC)</li>
+              <li><strong>Cash 2%</strong>: high-yield savings / short Treasury bills</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h3 style="margin:0">Risk Profile</h3>
+          <div class="small muted" style="margin-top:8px">Moderate — can tolerate temporary drawdowns but prefers balance.</div>
+          <div style="margin-top:12px">
+            <div class="small muted">Example stress test:</div>
+            <table>
+              <thead><tr><th>Stress</th><th>Estimated impact</th></tr></thead>
+              <tbody>
+                <tr><td>Severe equity bear (-40%)</td><td>Portfolio −24% (diversified bonds cushion)</td></tr>
+                <tr><td>Rising inflation</td><td>Real assets & equities help preserve purchasing power</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h3 style="margin:0">Assumptions</h3>
+          <ul class="small muted" style="margin-top:8px">
+            <li>Blended nominal return ≈ 6.2%/yr (illustrative)</li>
+            <li>Contribution examples are for demonstration only</li>
+            <li>No taxes, fees, or personalized constraints modeled</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      This is a static example / mock output for demo purposes — not financial advice.
+    </footer>
+  </div>
+
+  <script>
+    // ---------- Example data for "I'm 20... moderate-risk long-term" ----------
+    const exampleData = {
+      title: "Moderate-risk long-term (age 20)",
+      updated: new Date().toLocaleString(),
+      allocation: {
+        stocks: 60,
+        bonds: 30,
+        realEstate: 5,
+        commodities: 3,
+        cash: 2
+      },
+      assumptions: {
+        blendedReturn: 0.062,   // 6.2% nominal
+        volatility: 0.10,
+        horizonYears: 30
+      },
+      reasoning: "Tilt to equities for growth given long horizon; bonds to dampen volatility; small allocation to real assets for inflation hedge."
+    };
+
+    document.getElementById('updated').textContent = exampleData.updated;
+
+    // Fill table
+    const tbody = document.getElementById('allocTable');
+    for (const [k,v] of Object.entries(exampleData.allocation)){
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td style="text-transform:capitalize">${k}</td><td>${v}%</td>`;
+      tbody.appendChild(tr);
+    }
+
+    // Pie chart
+    const pieCtx = document.getElementById('pieAlloc').getContext('2d');
+    const pie = new Chart(pieCtx, {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(exampleData.allocation).map(k => k.charAt(0).toUpperCase()+k.slice(1)),
+        datasets: [{
+          data: Object.values(exampleData.allocation),
+          backgroundColor: ['#06b6d4','#60a5fa','#f97316','#f43f5e','#94a3b8'],
+          borderColor: '#071428',
+          borderWidth:2
+        }]
+      },
+      options: {
+        plugins:{
+          legend:{position:'bottom',labels:{color:'#cfe8fb'}},
+          tooltip:{bodyColor:'#062233',titleColor:'#062233',backgroundColor:'#e6f0f7'}
+        },
+        cutout: '50%'
+      }
+    });
+
+    // bar breakdown
+    const barCtx = document.getElementById('barBreakdown').getContext('2d');
+    const bar = new Chart(barCtx, {
+      type:'bar',
+      data:{
+        labels: Object.keys(exampleData.allocation).map(k => k.toUpperCase()),
+        datasets:[{label:'Target %',data:Object.values(exampleData.allocation),backgroundColor:'#60a5fa'}]
+      },
+      options:{
+        plugins:{legend:{display:false},tooltip:{backgroundColor:'#e6f0f7', titleColor:'#062233', bodyColor:'#062233'}},
+        scales:{y:{beginAtZero:true, max:100, ticks:{color:'#cfe8fb'}}, x:{ticks:{color:'#cfe8fb'}}}
+      }
+    });
+
+    // projection example (compound + monthly contributions)
+    const growthCtx = document.getElementById('growth').getContext('2d');
+
+    function projectSeries(initial, monthly, years, annualReturn) {
+      const months = Math.round(years*12);
+      const monthlyR = Math.pow(1+annualReturn, 1/12)-1;
+      let balance = initial;
+      const labels = [];
+      const data = [];
+      for(let m=0;m<=months;m++){
+        labels.push(m%12===0 ? (m/12) + 'y' : ''); // label per year
+        data.push(Math.round(balance));
+        balance = balance * (1+monthlyR) + monthly;
+      }
+      return {labels, data};
+    }
+
+    const proj = projectSeries(10000, 200, exampleData.assumptions.horizonYears, exampleData.assumptions.blendedReturn);
+
+    const growth = new Chart(growthCtx, {
+      type:'line',
+      data:{
+        labels: proj.labels,
+        datasets:[
+          {label:'Portfolio value (example)', data: proj.data, borderColor:'#34d399', backgroundColor:'rgba(52,211,153,0.08)', tension:0.25, fill:true}
+        ]
+      },
+      options:{
+        plugins:{legend:{labels:{color:'#cfe8fb'}}},
+        scales:{y:{ticks:{color:'#cfe8fb'}, beginAtZero:true}, x:{ticks:{color:'#cfe8fb'}}}
+      }
+    });
+
+    // expose exampleData to console for debugging
+    window._EXAMPLE = exampleData;
+  </script>
+</body>
+</html>
